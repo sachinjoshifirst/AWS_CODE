@@ -24,13 +24,15 @@ jobs:
         run: npm ci
 
       - name: Build Angular project
-        run: npm run build --prod
+        run: npm run build -- --configuration production
 
-      - name: Deploye to S3
+      - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          AWS_S3_BUCKET: angularwebnew
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-          SOURSCE_DIR: dist/insurance
+          args: --delete
+        env:
+          AWS_S3_BUCKET: angularwebnew               # ✅ Correct key name (was misspelled)
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}     # ✅ Correct casing
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-north-1
+          SOURCE_DIR: dist/insurance                 # ✅ Correct spelling (was SOURSCE_DIR)
